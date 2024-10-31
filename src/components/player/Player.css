@@ -1,5 +1,6 @@
 .art-subtitle {
-  padding-inline: 7px !important;
+  padding-inline: 0px !important;
+  gap: 2px !important;
 }
 .art-volume-panel {
   padding-bottom: 20px !important;
@@ -7,8 +8,12 @@
 .art-settings {
   margin-bottom: 20px !important;
 }
-.art-subtitle{
+.art-subtitle {
   margin-bottom: 1rem !important;
+}
+.art-subtitle-line {
+  background-color: rgba(0, 0, 0, 0.582) !important;
+  padding-inline: 3px !important;
 }
 .art-subtitle-line,
 .art-subtitle-line * {

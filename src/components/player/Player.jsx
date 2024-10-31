@@ -191,7 +191,6 @@ export default function Player({
       subtitle: {
         style: {
           "font-weight": "400",
-          "background-color": "rgba(0, 0, 0, 0.65)",
           height: "fit-content",
           width: "fit-content",
           marginInline: "auto",
@@ -214,6 +213,21 @@ export default function Player({
             top: "5px",
             right: "5px",
             transition: "opacity 0.5s ease-out",
+          },
+        },
+        {
+          html: "",
+          style: {
+            position: "absolute",
+            left: "50%",
+            top: 0,
+            width: "20%",
+            height: "100%",
+            transform: "translateX(-50%)",
+          },
+          disable: !Artplayer.utils.isMobile,
+          click: function () {
+            art.toggle();
           },
         },
       ],
@@ -255,7 +269,7 @@ export default function Player({
     art.on("resize", () => {
       art.subtitle.style({
         fontSize:
-          (art.height > 500 ? art.height * 0.02 : art.height * 0.04) + "px",
+          (art.width > 500 ? art.width * 0.02 : art.width * 0.04) + "px",
       });
     });
 
@@ -277,7 +291,7 @@ export default function Player({
       );
       art.subtitle.style({
         fontSize:
-          (art.height > 500 ? art.height * 0.02 : art.height * 0.04) + "px",
+          (art.width > 500 ? art.width * 0.02 : art.width * 0.04) + "px",
       });
       thumbnail &&
         art.plugins.add(
