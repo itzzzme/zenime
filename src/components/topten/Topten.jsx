@@ -106,8 +106,9 @@ function Topten({ data, className }) {
                 <img
                   src={item.poster}
                   alt={item.title}
-                  className="w-[60px] h-[75px] rounded-md object-cover flex-shrink-0"
+                  className="w-[60px] h-[75px] rounded-md object-cover flex-shrink-0 cursor-pointer"
                   loading="lazy"
+                  onClick={() => navigate(`/watch/${item.id}`)}
                   onMouseEnter={() => handleMouseEnter(item)}
                   onMouseLeave={handleMouseLeave}
                 />

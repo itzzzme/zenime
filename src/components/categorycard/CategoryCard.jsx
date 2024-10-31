@@ -8,7 +8,7 @@ import {
 import { FaChevronRight } from "react-icons/fa";
 import "./CategoryCard.css";
 import { useLanguage } from "@/src/context/LanguageContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Qtip from "../qtip/Qtip";
 import useToolTipPosition from "@/src/hooks/useToolTipPosition";
 
@@ -24,8 +24,8 @@ const CategoryCard = React.memo(
     limit,
   }) => {
     const { language } = useLanguage();
+    const navigate = useNavigate();
     const [showPlay, setShowPlay] = useState(false);
-
     if (limit) {
       data = data.slice(0, limit);
     }
@@ -119,6 +119,7 @@ const CategoryCard = React.memo(
                 >
                   <div
                     className="w-full relative group hover:cursor-pointer"
+                    onClick={() => navigate(`/watch/${item.id}`)}
                     onMouseEnter={() => handleMouseEnter(item)}
                     onMouseLeave={handleMouseLeave}
                   >
@@ -226,6 +227,7 @@ const CategoryCard = React.memo(
               >
                 <div
                   className="w-full relative group hover:cursor-pointer"
+                  onClick={() => navigate(`/watch/${item.id}`)}
                   onMouseEnter={() => handleMouseEnter(item)}
                   onMouseLeave={handleMouseLeave}
                 >
