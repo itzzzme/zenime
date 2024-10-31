@@ -203,14 +203,13 @@ const CategoryCard = React.memo(
                       {item.tvInfo.showType.split(" ").shift()}
                     </div>
                     <div className="dot"></div>
-                    <div
-                      className="text-gray-400 text-[14px] text-nowrap overflow-hidden text-ellipsis"
-                      title={item.tvInfo.duration}
-                    >
-                      {item.tvInfo.duration === "m" ||
-                      item.tvInfo.duration === "?"
+                    <div className="text-gray-400 text-[14px] text-nowrap overflow-hidden text-ellipsis">
+                      {item.tvInfo?.duration === "m" ||
+                      item.tvInfo?.duration === "?" ||
+                      item.duration === "m" ||
+                      item.duration === "?"
                         ? "N/A"
-                        : item.tvInfo.duration}
+                        : item.tvInfo?.duration || item.duration || "N/A"}
                     </div>
                   </div>
                 </div>
@@ -299,14 +298,13 @@ const CategoryCard = React.memo(
                     {item.tvInfo.showType.split(" ").shift()}
                   </div>
                   <div className="dot"></div>
-                  <div
-                    className="text-gray-400 text-[14px] text-nowrap overflow-hidden text-ellipsis"
-                    title={item.tvInfo.duration}
-                  >
-                    {item.tvInfo.duration === "m" ||
-                    item.tvInfo.duration === "?"
+                  <div className="text-gray-400 text-[14px] text-nowrap overflow-hidden text-ellipsis">
+                    {item.tvInfo?.duration === "m" ||
+                    item.tvInfo?.duration === "?" ||
+                    item.duration === "m" ||
+                    item.duration === "?"
                       ? "N/A"
-                      : item.tvInfo.duration}
+                      : item.tvInfo?.duration || item.duration || "N/A"}
                   </div>
                 </div>
               </div>
