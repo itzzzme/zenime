@@ -1,0 +1,10 @@
+.dot {
+    width: 4px;
+    height: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .3);
+    display: inline-block;
+}
