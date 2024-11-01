@@ -64,7 +64,7 @@ function Episodelist({
 
   function handleChange(e) {
     const value = e.target.value;
-    if (!value || isNaN(value)) {
+    if (!value || isNaN(value) || value.trim() === "") {
       const newRange = findRangeForEpisode(episodeNum);
       setSelectedRange(newRange);
       setActiveRange(`${newRange[0]}-${newRange[1]}`);
