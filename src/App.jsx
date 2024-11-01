@@ -5,7 +5,7 @@ import { HomeInfoProvider } from './context/HomeInfoContext';
 import Home from "./pages/Home/Home";
 import AnimeInfo from "./pages/animeInfo/AnimeInfo";
 import Navbar from "./components/navbar/Navbar";
-import Footer from "./components/Footer/Footer";
+import Footer from "./components/footer/Footer";
 import Error from './components/error/Error';
 import Category from './pages/category/Category';
 import AtoZ from './pages/a2z/AtoZ';
