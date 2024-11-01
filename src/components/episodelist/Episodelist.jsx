@@ -220,7 +220,7 @@ function Episodelist({
                           : "bg-[#35373D] text-gray-400"
                       } ${
                         isSearched ? "glow-animation" : ""
-                      } hover:bg-[#67686F] hover:text-white`}
+                      } md:hover:bg-[#67686F] md:hover:text-white`}
                       onClick={() => {
                         if (episodeNumber) {
                           onEpisodeClick(episodeNumber);
@@ -248,7 +248,7 @@ function Episodelist({
                       (index + 1) % 2 && !isActive
                         ? "bg-[#201F2D] text-gray-400"
                         : "bg-none"
-                    } group hover:bg-[#2B2A42] ${
+                    } group md:hover:bg-[#2B2A42] ${
                       isActive ? "text-[#ffbade] bg-[#2B2A42]" : ""
                     } ${isSearched ? "glow-animation" : ""}`}
                     onClick={() => {

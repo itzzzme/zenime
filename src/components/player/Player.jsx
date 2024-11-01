@@ -192,7 +192,7 @@ export default function Player({
         style: {
           "font-weight": "400",
           height: "fit-content",
-          width: "fit-content",
+          minWidth: "fit-content",
           marginInline: "auto",
           "margin-top": "auto",
           "margin-bottom": "2rem",
@@ -269,7 +269,7 @@ export default function Player({
     art.on("resize", () => {
       art.subtitle.style({
         fontSize:
-          (art.width > 500 ? art.width * 0.02 : art.width * 0.04) + "px",
+          (art.width > 500 ? art.width * 0.02 : art.width * 0.03) + "px",
       });
     });
 
@@ -291,7 +291,7 @@ export default function Player({
       );
       art.subtitle.style({
         fontSize:
-          (art.width > 500 ? art.width * 0.02 : art.width * 0.04) + "px",
+          (art.width > 500 ? art.width * 0.02 : art.width * 0.03) + "px",
       });
       thumbnail &&
         art.plugins.add(

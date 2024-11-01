@@ -31,7 +31,7 @@ export default function WatchControls({
   );
 
   useEffect(() => {
-    if (episodes.length > 0) {
+    if (episodes?.length > 0) {
       const newIndex = episodes.findIndex(
         (episode) => episode.id.match(/ep=(\d+)/)?.[1] === episodeId
       );
@@ -71,13 +71,13 @@ export default function WatchControls({
         </button>
         <button
           onClick={() => {
-            if (currentEpisodeIndex < episodes.length - 1) {
+            if (currentEpisodeIndex < episodes?.length - 1) {
               onButtonClick(
                 episodes[currentEpisodeIndex + 1].id.match(/ep=(\d+)/)?.[1]
               );
             }
           }}
-          disabled={currentEpisodeIndex >= episodes.length - 1}
+          disabled={currentEpisodeIndex >= episodes?.length - 1}
         >
           <FontAwesomeIcon
             icon={faForward}

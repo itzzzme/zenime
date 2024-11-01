@@ -12,7 +12,8 @@
   margin-bottom: 1rem !important;
 }
 .art-subtitle-line {
-  background-color: rgba(0, 0, 0, 0.582) !important;
+  min-width: fit-content;
+  background-color: rgba(0, 0, 0, 0.479) !important;
   padding-inline: 3px !important;
 }
 .art-subtitle-line,
