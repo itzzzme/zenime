@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import getAnimeInfo from "@/src/utils/getAnimeInfo.utils";
 import getStreamInfo from "@/src/utils/getStreamInfo.utils";
 import getEpisodes from "@/src/utils/getEpisodes.utils";
+import getNextEpisodeSchedule from "../utils/getNextEpisodeSchedule.utils";
 
 export const useWatch = (animeId, initialEpisodeId) => {
   const [error, setError] = useState(null);
@@ -23,6 +24,19 @@ export const useWatch = (animeId, initialEpisodeId) => {
   const [activeEpisodeNum, setActiveEpisodeNum] = useState(null);
   const [activeServerId, setActiveServerId] = useState(null);
   const [serverLoading, setServerLoading] = useState(true);
+  const [nextEpisodeSchedule, setNextEpisodeSchedule] = useState(null);
+
+  useEffect(() => {
+    const fetchNextEpisodeSchedule = async (animeId) => {
+      try {
+        const data = await getNextEpisodeSchedule(animeId);
+        setNextEpisodeSchedule(data);
+      } catch (err) {
+        console.error("Error fetching next episode schedule:", err);
+      }
+    };
+    fetchNextEpisodeSchedule(animeId);
+  }, [animeId]);
 
   useEffect(() => {
     const fetchAnimeInfo = async () => {
@@ -148,6 +162,7 @@ export const useWatch = (animeId, initialEpisodeId) => {
     streamInfo,
     animeInfo,
     episodes,
+    nextEpisodeSchedule,
     animeInfoLoading,
     totalEpisodes,
     seasons,

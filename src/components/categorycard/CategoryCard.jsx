@@ -139,11 +139,12 @@ const CategoryCard = React.memo(
                         className={`w-full h-[320px] object-cover max-[1200px]:h-[35vw] max-[758px]:h-[45vw] max-[478px]:h-[60vw] group-hover:blur-[7px] transform transition-all duration-300 ease-in-out ultra-wide:h-[400px] ${cardStyle}`}
                       />
                     </div>
-                    {item.tvInfo?.rating === "18+" && (
-                      <div className="text-white px-2 rounded-md bg-[#FF5700] absolute top-2 left-2 flex items-center justify-center text-[14px] font-bold">
-                        18+
-                      </div>
-                    )}
+                    {item.tvInfo?.rating === "18+" ||
+                      (item?.adultContent === true && (
+                        <div className="text-white px-2 rounded-md bg-[#FF5700] absolute top-2 left-2 flex items-center justify-center text-[14px] font-bold">
+                          18+
+                        </div>
+                      ))}
                     <div className="absolute left-2 bottom-3 flex items-center justify-center w-fit space-x-1 z-[100] max-[270px]:flex-col max-[270px]:gap-y-[3px]">
                       {item.tvInfo?.sub && (
                         <div className="flex space-x-1 justify-center items-center bg-[#B0E3AF] rounded-[2px] px-[4px] text-black py-[2px]">
@@ -246,11 +247,12 @@ const CategoryCard = React.memo(
                       className={`w-full h-[250px] object-cover max-[1200px]:h-[35vw] max-[758px]:h-[45vw] max-[478px]:h-[60vw] ${cardStyle} group-hover:blur-[7px] transform transition-all duration-300 ease-in-out `}
                     />
                   </div>
-                  {item.tvInfo?.rating === "18+" && (
-                    <div className="text-white px-2 rounded-md bg-[#FF5700] absolute top-2 left-2 flex items-center justify-center text-[14px] font-bold">
-                      18+
-                    </div>
-                  )}
+                  {item.tvInfo?.rating === "18+" ||
+                    (item?.adultContent === true && (
+                      <div className="text-white px-2 rounded-md bg-[#FF5700] absolute top-2 left-2 flex items-center justify-center text-[14px] font-bold">
+                        18+
+                      </div>
+                    ))}
                   <div className="absolute left-2 bottom-4 flex items-center justify-center w-fit space-x-1 z-[100] max-[270px]:flex-col max-[270px]:gap-y-[3px]">
                     {item.tvInfo?.sub && (
                       <div className="flex space-x-1 justify-center items-center bg-[#B0E3AF] rounded-[2px] px-[4px] text-black py-[2px]">
