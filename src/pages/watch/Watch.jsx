@@ -31,6 +31,7 @@ export default function Watch() {
   const [tags, setTags] = useState([]);
   const { language } = useLanguage();
   const { homeInfo } = useHomeInfo();
+  const [showNextEpisodeSchedule, setShowNextEpisodeSchedule] = useState(true);
   const {
     error,
     buffering,
@@ -279,6 +280,36 @@ export default function Watch() {
                         />
                       </Link>
                     ))}
+                  </div>
+                </div>
+              )}
+              {animeInfo?.nextEpisodeSchedule && showNextEpisodeSchedule && (
+                <div className="p-4">
+                  <div className="w-full px-4 rounded-md bg-[#0088CC] flex items-center justify-between gap-x-2">
+                    <div className="w-full h-fit">
+                      <span className="text-[18px]">🚀</span>
+                      {" Estimated the next episode will come at "}
+                      <span className="text-[13.4px] font-medium">
+                        {new Date(
+                          new Date(animeInfo.nextEpisodeSchedule).getTime() -
+                            new Date().getTimezoneOffset() * 60000
+                        ).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                          second: "numeric",
+                          hour12: true,
+                        })}
+                      </span>
+                    </div>
+                    <span
+                      className="text-[25px] h-fit font-extrabold text-[#80C4E6] mb-1 cursor-pointer"
+                      onClick={() => setShowNextEpisodeSchedule(false)}
+                    >
+                      ×
+                    </span>
                   </div>
                 </div>
               )}

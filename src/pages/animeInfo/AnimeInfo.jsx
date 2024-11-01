@@ -54,21 +54,26 @@ function AnimeInfo({ random = false }) {
   const { id: currentId } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    const fetchAnimeInfo = async () => {
-      setLoading(true);
-      try {
-        const data = await getAnimeInfo(id, random);
-        setSeasons(data?.seasons);
-        setAnimeInfo(data.data);
-      } catch (err) {
-        console.error("Error fetching anime info:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAnimeInfo();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (id === "404-not-found-page") {
+      console.log("404 got!")
+      return null;
+    } else {
+      const fetchAnimeInfo = async () => {
+        setLoading(true);
+        try {
+          const data = await getAnimeInfo(id, random);
+          setSeasons(data?.seasons);
+          setAnimeInfo(data.data);
+        } catch (err) {
+          console.error("Error fetching anime info:", err);
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchAnimeInfo();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, [id, random]);
   useEffect(() => {
     if (animeInfo && location.pathname === `/${animeInfo.id}`) {
