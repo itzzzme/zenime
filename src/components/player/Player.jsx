@@ -7,8 +7,10 @@ import autoSkip from "./autoSkip";
 import artplayerPluginVttThumbnail from "./artPlayerPluginVttThumbnail";
 import {
   backward10Icon,
+  backwardIcon,
   captionIcon,
   forward10Icon,
+  forwardIcon,
   fullScreenOffIcon,
   fullScreenOnIcon,
   loadingIcon,
@@ -230,6 +232,62 @@ export default function Player({
             art.toggle();
           },
         },
+        {
+          name: "rewind",
+          html: "",
+          style: {
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: "40%",
+            height: "100%",
+          },
+          disable: !Artplayer.utils.isMobile,
+          click: () => {
+            art.controls.show = !art.controls.show;
+          },
+        },
+        {
+          name: "forward",
+          html: "",
+          style: {
+            position: "absolute",
+            right: 0,
+            top: 0,
+            width: "40%",
+            height: "100%",
+          },
+          disable: !Artplayer.utils.isMobile,
+          click: () => {
+            art.controls.show = !art.controls.show;
+          },
+        },
+        {
+          name: "backwardIcon",
+          html: backwardIcon,
+          style: {
+            position: "absolute",
+            left: "25%",
+            top: "50%",
+            transform: "translate(50%,-50%)",
+            opacity: 0,
+            transition: "opacity 0.5s ease-in-out",
+          },
+          disable: !Artplayer.utils.isMobile,
+        },
+        {
+          name: "forwardIcon",
+          html: forwardIcon,
+          style: {
+            position: "absolute",
+            right: "25%",
+            top: "50%",
+            transform: "translate(50%, -50%)",
+            opacity: 0,
+            transition: "opacity 0.5s ease-in-out",
+          },
+          disable: !Artplayer.utils.isMobile,
+        },
       ],
       controls: [
         {
@@ -275,6 +333,25 @@ export default function Player({
 
     art.on("ready", () => {
       art.currentTime = playerProgress;
+      const $rewind = art.layers["rewind"];
+      const $forward = art.layers["forward"];
+      art.proxy($rewind, "dblclick", () => {
+        art.notice.show = "-10s";
+        art.currentTime = Math.max(0, art.currentTime - 10);
+        art.layers["backwardIcon"].style.opacity = 1;
+        setTimeout(() => {
+          art.layers["backwardIcon"].style.opacity = 0;
+        }, 300);
+      });
+      art.proxy($forward, "dblclick", () => {
+        art.notice.show = "+10s";
+        art.currentTime = Math.max(0, art.currentTime + 10);
+        art.layers["forwardIcon"].style.opacity = 1;
+        setTimeout(() => {
+          art.layers["forwardIcon"].style.opacity = 0;
+        }, 300);
+      });
+
       art.on("video:progress", () => {
         setPlayerProgress(art.currentTime);
       });
