@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import './skeleton.css';
+import './Skeleton.css';
 
 function Skeleton({ className, animation=true, ...props }) {
   return (
