@@ -1,17 +1,7 @@
 export function toggleScrollbar(isOpen) {
   const getScrollbarWidth = () => {
-    const div = document.createElement("div");
-    div.style.overflow = "scroll";
-    div.style.width = "100px";
-    div.style.height = "100px";
-    div.style.position = "absolute";
-    document.body.appendChild(div);
-
-    const scrollbarWidth = div.offsetWidth - div.clientWidth;
-    div.remove();
-    return scrollbarWidth;
+    return window.innerWidth - document.documentElement.clientWidth;
   };
-
   const body = document.body;
   if (isOpen) {
     const scrollbarWidth = getScrollbarWidth();
@@ -20,7 +10,7 @@ export function toggleScrollbar(isOpen) {
 
     const style = document.createElement("style");
     style.id = "hide-scrollbar";
-    style.innerHTML = `::-webkit-scrollbar {display:none;}`;
+    style.innerHTML = `::-webkit-scrollbar { display: none; }`;
     document.head.appendChild(style);
   } else {
     body.style.paddingRight = "0";
@@ -31,10 +21,9 @@ export function toggleScrollbar(isOpen) {
     }
   }
 }
-
 export function cleanupScrollbar() {
   const body = document.body;
-  body.style.paddingRight = "0"; // Cleanup padding
+  body.style.paddingRight = "0";
   body.classList.remove("overflow-y-hidden");
   const styleElement = document.getElementById("hide-scrollbar");
   if (styleElement) {

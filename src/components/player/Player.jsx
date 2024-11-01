@@ -330,7 +330,9 @@ export default function Player({
             return item.html;
           },
         });
-      autoSkipIntro && art.plugins.add(autoSkip(ranges));
+      {
+        autoSkipIntro && art.plugins.add(autoSkip(ranges));
+      }
       setTimeout(() => {
         art.layers[website_name].style.opacity = 0;
       }, 2000);
