@@ -333,25 +333,9 @@ export default function Player({
 
     art.on("ready", () => {
       art.currentTime = playerProgress;
-      const $rewind = art.layers["rewind"];
-      const $forward = art.layers["forward"];
-      art.proxy($rewind, "dblclick", () => {
-        art.notice.show = "-10s";
-        art.currentTime = Math.max(0, art.currentTime - 10);
-        art.layers["backwardIcon"].style.opacity = 1;
-        setTimeout(() => {
-          art.layers["backwardIcon"].style.opacity = 0;
-        }, 300);
-      });
-      art.proxy($forward, "dblclick", () => {
-        art.notice.show = "+10s";
-        art.currentTime = Math.max(0, art.currentTime + 10);
-        art.layers["forwardIcon"].style.opacity = 1;
-        setTimeout(() => {
-          art.layers["forwardIcon"].style.opacity = 0;
-        }, 300);
-      });
-
+      setTimeout(() => {
+        art.layers[website_name].style.opacity = 0;
+      }, 2000);
       art.on("video:progress", () => {
         setPlayerProgress(art.currentTime);
       });
@@ -410,16 +394,31 @@ export default function Player({
       {
         autoSkipIntro && art.plugins.add(autoSkip(ranges));
       }
-      setTimeout(() => {
-        art.layers[website_name].style.opacity = 0;
-      }, 2000);
-    });
-    const defaultSubtitle = subtitles?.find((sub) => sub.label === "English");
-    if (defaultSubtitle) {
-      art.subtitle.switch(defaultSubtitle.file, {
-        name: defaultSubtitle.label,
+      const defaultSubtitle = subtitles?.find((sub) => sub.label === "English");
+      if (defaultSubtitle) {
+        art.subtitle.switch(defaultSubtitle.file, {
+          name: defaultSubtitle.label,
+        });
+      }
+      const $rewind = art.layers["rewind"];
+      const $forward = art.layers["forward"];
+      art.proxy($rewind, "dblclick", () => {
+        art.notice.show = "-10s";
+        art.currentTime = Math.max(0, art.currentTime - 10);
+        art.layers["backwardIcon"].style.opacity = 1;
+        setTimeout(() => {
+          art.layers["backwardIcon"].style.opacity = 0;
+        }, 300);
       });
-    }
+      art.proxy($forward, "dblclick", () => {
+        art.notice.show = "+10s";
+        art.currentTime = Math.max(0, art.currentTime + 10);
+        art.layers["forwardIcon"].style.opacity = 1;
+        setTimeout(() => {
+          art.layers["forwardIcon"].style.opacity = 0;
+        }, 300);
+      });
+    });
     return () => {
       if (art && art.destroy) {
         art.destroy(false);
