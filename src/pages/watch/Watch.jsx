@@ -297,13 +297,13 @@ export default function Watch() {
                               nextEpisodeSchedule.nextEpisodeSchedule
                             ).getTime() -
                               new Date().getTimezoneOffset() * 60000
-                          ).toLocaleString("en-US", {
+                          ).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "2-digit",
                             year: "numeric",
-                            month: "numeric",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                            second: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
                             hour12: true,
                           })}
                         </span>
