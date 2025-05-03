@@ -75,9 +75,12 @@ export default function Watch() {
 
   useEffect(() => {
     if (!episodes || episodes.length === 0) return;
-  
-    const isValidEpisode = episodes.some(ep => ep.id.includes(`ep=${episodeId}`));
-  
+    
+    const isValidEpisode = episodes.some(ep => {
+      const epNumber = ep.id.split('ep=')[1];
+      return epNumber === episodeId; 
+    });
+    
     // If missing or invalid episodeId, fallback to first
     if (!episodeId || !isValidEpisode) {
       const fallbackId = episodes[0].id.match(/ep=(\d+)/)?.[1];
