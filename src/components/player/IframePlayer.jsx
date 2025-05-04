@@ -29,26 +29,28 @@ export default function IframePlayer({
     const loadIframeUrl = async () => {
       setLoading(true);
       setIframeLoaded(false);
+      setIframeSrc(""); 
       if (serverName.toLowerCase() === "hd-3") {
         try {
-          const {data} = await axios.get(`${apiURL}/stream?id=${animeId}?ep=${episodeId}&server=${serverName}&type=${servertype}&anilistId=${animeInfo.anilistId}&epnum=${episodeNum}`);
-          const sources=data.results.streamingLink;
-          const selectedSource = sources.find(
-            (source) => source.quality === servertype 
+          const { data } = await axios.get(
+            `${apiURL}/stream?id=${animeId}?ep=${episodeId}&server=${serverName}&type=${servertype}&anilistId=${animeInfo.anilistId}&epnum=${episodeNum}`
           );
-          if(selectedSource)setIframeSrc(selectedSource.embed_frame);
+          const sources = data.results.streamingLink;
+          const selectedSource = sources.find(
+            (source) => source.quality === servertype
+          );
+          if (selectedSource) setIframeSrc(selectedSource.embed_frame);
           else setIframeSrc(sources[0].embed_frame);
         } catch (err) {
           console.error("Failed to load HD-3 iframe:", err);
-          setIframeSrc(""); 
+          setIframeSrc("");
         }
       } else {
         setIframeSrc(`${baseURL}/${episodeId}/${servertype}`);
       }
-      setLoading(false);
     };
     loadIframeUrl();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeId, servertype, serverName, animeInfo]);
 
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function IframePlayer({
       }
       localStorage.setItem("continueWatching", JSON.stringify(continueWatching));
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeId, servertype]);
 
   return (
@@ -120,7 +122,7 @@ export default function IframePlayer({
       </div>
 
       <iframe
-        key={`${episodeId}-${servertype}-${serverName}`}
+        key={`${episodeId}-${servertype}-${serverName}-${iframeSrc}`}
         src={iframeSrc}
         allowFullScreen
         className={`w-full h-full transition-opacity duration-500 ${
@@ -128,7 +130,7 @@ export default function IframePlayer({
         }`}
         onLoad={() => {
           setIframeLoaded(true);
-          setTimeout(() => setLoading(false), 200); 
+          setTimeout(() => setLoading(false), 200);
         }}
       ></iframe>
     </div>
