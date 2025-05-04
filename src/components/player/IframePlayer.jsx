@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import BouncingLoader from "../ui/bouncingloader/Bouncingloader";
+import axios from "axios";
 
 export default function IframePlayer({
+  animeId,
   episodeId,
+  serverName,
   servertype,
   animeInfo,
   episodeNum,
@@ -11,14 +14,42 @@ export default function IframePlayer({
   playNext,
   autoNext,
 }) {
+  const apiURL = import.meta.env.VITE_API_URL;
   const baseURL = import.meta.env.VITE_BASE_IFRAME_URL;
   const [loading, setLoading] = useState(true);
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [iframeSrc, setIframeSrc] = useState("");
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(
     episodes?.findIndex(
       (episode) => episode.id.match(/ep=(\d+)/)?.[1] === episodeId
     )
   );
+
+  useEffect(() => {
+    const loadIframeUrl = async () => {
+      setLoading(true);
+      setIframeLoaded(false);
+      if (serverName.toLowerCase() === "hd-3") {
+        try {
+          const {data} = await axios.get(`${apiURL}/stream?id=${animeId}?ep=${episodeId}&server=${serverName}&type=${servertype}&anilistId=${animeInfo.anilistId}&epnum=${episodeNum}`);
+          const sources=data.results.streamingLink;
+          const selectedSource = sources.find(
+            (source) => source.quality === servertype 
+          );
+          if(selectedSource)setIframeSrc(selectedSource.embed_frame);
+          else setIframeSrc(sources[0].embed_frame);
+        } catch (err) {
+          console.error("Failed to load HD-3 iframe:", err);
+          setIframeSrc(""); 
+        }
+      } else {
+        setIframeSrc(`${baseURL}/${episodeId}/${servertype}`);
+      }
+      setLoading(false);
+    };
+    loadIframeUrl();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [episodeId, servertype, serverName, animeInfo]);
 
   useEffect(() => {
     if (episodes?.length > 0) {
@@ -74,6 +105,7 @@ export default function IframePlayer({
       }
       localStorage.setItem("continueWatching", JSON.stringify(continueWatching));
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeId, servertype]);
 
   return (
@@ -88,8 +120,8 @@ export default function IframePlayer({
       </div>
 
       <iframe
-        key={`${episodeId}-${servertype}`}
-        src={`${baseURL}/${episodeId}/${servertype}`}
+        key={`${episodeId}-${servertype}-${serverName}`}
+        src={iframeSrc}
         allowFullScreen
         className={`w-full h-full transition-opacity duration-500 ${
           iframeLoaded ? "opacity-100" : "opacity-0"

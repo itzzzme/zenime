@@ -108,6 +108,7 @@ export default function Watch() {
     return () => {
       document.title = `${website_name} | Free anime streaming platform`;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animeId]);
 
   // Redirect if no episodes
@@ -232,10 +233,12 @@ export default function Watch() {
             </div>
             <div className="player w-full h-fit bg-black flex flex-col">
               <div className="w-full relative h-[480px] max-[1400px]:h-[40vw] max-[1200px]:h-[48vw] max-[1024px]:h-[58vw] max-[600px]:h-[65vw]">
-                {!buffering ? ( activeServerName.toLowerCase()==="hd-1" ?
+                {!buffering ? (( activeServerName.toLowerCase()==="hd-1" || activeServerName.toLowerCase()==="hd-3") ?
                   <IframePlayer
+                    animeId={animeId}
                     episodeId={episodeId}
                     servertype={activeServerType}
+                    serverName={activeServerName}
                     animeInfo={animeInfo}
                     episodeNum={activeEpisodeNum}
                     episodes={episodes}

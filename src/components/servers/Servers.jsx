@@ -16,18 +16,26 @@ function Servers({
   setActiveServerId,
   serverLoading,
   setActiveServerType,
-  setActiveServerName
+  setActiveServerName,
 }) {
-  const subServers = servers?.filter((server) => server.type === "sub") || [];
-  const dubServers = servers?.filter((server) => server.type === "dub") || [];
-  const rawServers = servers?.filter((server) => server.type === "raw") || [];
+  const subServers =
+    servers?.filter((server) => server.type === "sub") || [];
+  const dubServers =
+    servers?.filter((server) => server.type === "dub") || [];
+  const rawServers =
+    servers?.filter((server) => server.type === "raw") || [];
 
   useEffect(() => {
     const savedServerName = localStorage.getItem("server_name");
-
+    const serverType=localStorage.getItem("server_type");
+    if(savedServerName.toLowerCase()==="hd-3"){
+      setActiveServerId(serverType==="sub"?3:4);
+      setActiveServerType(serverType);
+      setActiveServerName(savedServerName);
+    }
     if (savedServerName) {
       const matchingServer = servers?.find(
-        (server) => server.serverName === savedServerName
+        (server) => server.serverName === savedServerName,
       );
 
       if (matchingServer) {
@@ -41,7 +49,7 @@ function Servers({
       setActiveServerId(servers[0].data_id);
       setActiveServerType(servers[0].type);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [servers]);
 
   const handleServerSelect = (server) => {

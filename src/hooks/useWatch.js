@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from "react";
 import getAnimeInfo from "@/src/utils/getAnimeInfo.utils";
 import getEpisodes from "@/src/utils/getEpisodes.utils";
@@ -121,6 +122,17 @@ export const useWatch = (animeId, initialEpisodeId) => {
           (server) =>
             server.serverName === "HD-1" || server.serverName === "HD-2"
         );
+        const hd3Sub = {
+          type: "sub",
+          serverName: "HD-3",
+          data_id: 3,
+        };
+        const hd3Dub = {
+          type: "dub",
+          serverName: "HD-3",
+          data_id: 4,
+        };
+        filteredServers.push(hd3Sub, hd3Dub);
         const savedServerName = localStorage.getItem("server_name");
         const savedServerType = localStorage.getItem("server_type");
         let initialServer;
@@ -174,7 +186,11 @@ export const useWatch = (animeId, initialEpisodeId) => {
       isStreamFetchInProgress.current
     )
       return;
-    if (activeServerName?.toLowerCase() === "hd-1" && !serverLoading) {
+    if (
+      (activeServerName?.toLowerCase() === "hd-1" ||
+        activeServerName?.toLowerCase() === "hd-3") &&
+      !serverLoading
+    ) {
       setBuffering(false);
       return;
     }
