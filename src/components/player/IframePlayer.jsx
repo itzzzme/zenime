@@ -33,7 +33,7 @@ export default function IframePlayer({
       if (serverName.toLowerCase() === "hd-3") {
         try {
           const { data } = await axios.get(
-            `${apiURL}/stream?id=${animeId}?ep=${episodeId}&server=${serverName}&type=${servertype}&anilistId=${animeInfo.anilistId}&epnum=${episodeNum}`
+            `${apiURL}/stream?id=${animeId}&ep=${episodeId}&server=${serverName}&type=${servertype}&anilistId=${animeInfo.anilistId || animeInfo.malId}&epnum=${episodeNum}`
           );
           const sources = data.results.streamingLink;
           const selectedSource = sources.find(
