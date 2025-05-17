@@ -28,8 +28,8 @@ function Servers({
   useEffect(() => {
     const savedServerName = localStorage.getItem("server_name");
     const serverType=localStorage.getItem("server_type");
-    if(savedServerName?.toLowerCase()==="hd-3"){
-      setActiveServerId(serverType==="sub"?3:4);
+    if(savedServerName?.toLowerCase()==="hd-4"){
+      setActiveServerId(serverType==="sub"?1003:1004);
       setActiveServerType(serverType);
       setActiveServerName(savedServerName);
     }

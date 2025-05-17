@@ -30,7 +30,7 @@ export default function IframePlayer({
       setLoading(true);
       setIframeLoaded(false);
       setIframeSrc(""); 
-      if (serverName.toLowerCase() === "hd-3") {
+      if (serverName.toLowerCase() === "hd-4") {
         try {
           const { data } = await axios.get(
             `${apiURL}/stream?id=${animeId}?ep=${episodeId}&server=${serverName}&type=${servertype}&anilistId=${animeInfo.anilistId || animeInfo.malId}&epnum=${episodeNum}`
@@ -42,7 +42,7 @@ export default function IframePlayer({
           if (selectedSource) setIframeSrc(selectedSource.embed_frame);
           else setIframeSrc(sources[0].embed_frame);
         } catch (err) {
-          console.error("Failed to load HD-3 iframe:", err);
+          console.error("Failed to load HD-4 iframe:", err);
           setIframeSrc("");
         }
       } else {
