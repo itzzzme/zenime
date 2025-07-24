@@ -1,0 +1,15 @@
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 7px #ffbade;
+  }
+  50% {
+    box-shadow: 0 0 20px #ffbade;
+  }
+  100% {
+    box-shadow: 0 0 7px #ffbade;
+  }
+}
+
+.glow-animation {
+  animation: glow 1.5s infinite;
+}

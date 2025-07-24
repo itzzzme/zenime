@@ -1,0 +1,68 @@
+.swiper {
+  width: 100%;
+}
+.swiper-slide {
+  font-size: 18px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+}
+.button-prev,
+.button-next {
+  width: 40px;
+  height: 40px;
+  color: white;
+  background-color: #383747;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button-prev:hover,
+.button-next:hover {
+  background-color: #ffbade;
+  color: #383747;
+}
+
+.button-prev::after {
+  font-family: "Font Awesome 5 Free";
+  content: "\f053";
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.button-next::after {
+  font-family: "Font Awesome 5 Free";
+  content: "\f054";
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets {
+  display: none;
+}
+.swiper-pagination-bullet-active {
+  background-color: rgb(239, 213, 22) !important;
+}
+@media only screen and (max-width: 575px) {
+  .swiper-horizontal > .swiper-pagination-bullets {
+    /* bottom: var(--swiper-pagination-bottom, 8px); */
+    bottom: 0;
+    right: 10px !important ;
+    left: auto !important;
+    width: 20px !important;
+    bottom: 5px !important;
+    display: flex !important;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    height: 80%;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 2048px;
+  margin-inline: auto;
+}
+.content {
+  width: 100%;
+  flex-grow: 1;
+}
+
+footer {
+  margin-top: auto;
+}
