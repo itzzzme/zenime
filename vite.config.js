@@ -9,4 +9,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./"),
     },
   },
+  server: {
+    proxy: {
+      '/proxy': {
+        target: 'https://rproxy.zenime.site', 
+        changeOrigin: true,
+        rewrite: path => path, 
+      },
+    },
+  },
 })
