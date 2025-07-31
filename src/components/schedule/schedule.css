@@ -1,0 +1,11 @@
+.next,
+.prev {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background-color: white;
+  color: black;
+  font-size: 13px;
+  padding: 10px;
+  z-index: 10;
+}

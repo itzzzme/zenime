@@ -1,0 +1,9 @@
+.servers {
+  border-bottom: 1px dashed #35373d;
+}
+.servers:only-child {
+  border-bottom: none;
+}
+.servers:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,29 @@
+.splashscreen {
+  overflow: hidden;
+}
+.splashitem {
+  margin: 0px 6px 6px 0px;
+  display: block;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  float: left;
+  color: #fff;
+  cursor: pointer;
+}
+.splashoverlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(43, 42, 60, 1) 0%,
+    rgba(43, 42, 60, 0) 100%
+  );
+  z-index: 30;
+}
