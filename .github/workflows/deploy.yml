@@ -21,10 +21,10 @@ jobs:
         run: |
           ssh ${{ secrets.USER_NAME }}@${{ secrets.HOST }} << 'EOF'
             cd /var/www/zenime
-            git fetch origin prod_cf
-            git checkout prod_cf
-            git pull origin prod_cf
+            sudo git fetch origin prod_cf
+            sudo git checkout prod_cf
+            sudo git pull origin prod_cf
             sudo rm -rf dist
-            npm install
-            npm run build
+            sudo npm install
+            sudo npm run build
           EOF
