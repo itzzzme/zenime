@@ -19,28 +19,24 @@ function Servers({
   setActiveServerType,
   setActiveServerName,
 }) {
-  const subServers =
-    servers?.filter((server) => server.type === "sub") || [];
-  const dubServers =
-    servers?.filter((server) => server.type === "dub") || [];
-  const rawServers =
-    servers?.filter((server) => server.type === "raw") || [];
+  const rawServers = servers?.filter((s) => s.type === "raw") || [];
+  const subServers = servers?.filter((s) => s.type === "sub") || [];
+  const dubServers = servers?.filter((s) => s.type === "dub") || [];
+
+  const nonEmptyLists = [rawServers, subServers, dubServers].filter((list) => list.length > 0).length;
 
   useEffect(() => {
     const savedServerName = localStorage.getItem("server_name");
     if (savedServerName) {
-      const matchingServer = servers?.find(
-        (server) => server.serverName === savedServerName,
-      );
-
-      if (matchingServer) {
-        setActiveServerId(matchingServer.data_id);
-        setActiveServerType(matchingServer.type);
-      } else if (servers && servers.length > 0) {
+      const match = servers?.find((s) => s.serverName === savedServerName);
+      if (match) {
+        setActiveServerId(match.data_id);
+        setActiveServerType(match.type);
+      } else if (servers?.length) {
         setActiveServerId(servers[0].data_id);
         setActiveServerType(servers[0].type);
       }
-    } else if (servers && servers.length > 0) {
+    } else if (servers?.length) {
       setActiveServerId(servers[0].data_id);
       setActiveServerType(servers[0].type);
     }
@@ -54,8 +50,13 @@ function Servers({
     localStorage.setItem("server_name", server.serverName);
     localStorage.setItem("server_type", server.type);
   };
+
   return (
-    <div className="relative bg-[#11101A] p-4 w-full min-h-[100px] flex justify-center items-center max-[1200px]:bg-[#14151A]">
+    <div
+      className={`relative bg-[#11101A] p-4 w-full min-h-[100px] flex justify-center ${
+        nonEmptyLists === 1 ? "items-start" : "items-center"
+      } max-[1200px]:bg-[#14151A]`}
+    >
       {serverLoading ? (
         <div className="w-full h-full rounded-lg flex justify-center items-center max-[600px]:rounded-none">
           <BouncingLoader />
@@ -70,104 +71,74 @@ function Servers({
               </span>
             </p>
             <p className="leading-5 text-[14px] font-medium text-center">
-              If the current server doesn&apos;t work, please try other servers
-              beside.
+              If the current server doesn’t work, please try other servers beside.
             </p>
           </div>
           <div className="bg-[#201F31] flex flex-col max-[600px]:h-full">
             {rawServers.length > 0 && (
-              <div
-                className={`servers px-2 flex items-center flex-wrap ml-2 max-[600px]:py-2 ${
-                  dubServers.length === 0 || subServers.length === 0
-                    ? "h-1/2"
-                    : "h-full"
-                }`}
-              >
+              <div className="servers p-2 flex items-center flex-wrap ml-2 max-[600px]:py-2">
                 <div className="flex items-center gap-x-2">
-                  <FontAwesomeIcon
-                    icon={faFile}
-                    className="text-[#ffbade] text-[13px]"
-                  />
+                  <FontAwesomeIcon icon={faFile} className="text-[#ffbade] text-[13px]" />
                   <p className="font-bold text-[14px]">RAW:</p>
                 </div>
                 <div className="flex gap-[7px] ml-8 flex-wrap">
-                  {rawServers.map((item, index) => (
+                  {rawServers.map((item, idx) => (
                     <div
-                      key={index}
+                      key={idx}
                       className={`px-6 py-[5px] rounded-lg cursor-pointer ${
-                        activeServerId === item?.data_id && activeServerName === item?.serverName
+                        activeServerId === item.data_id && activeServerName === item.serverName
                           ? "bg-[#ffbade] text-black"
                           : "bg-[#373646] text-white"
                       } max-[700px]:px-3`}
                       onClick={() => handleServerSelect(item)}
                     >
-                      <p className="text-[13px] font-semibold">
-                        {item.serverName}
-                      </p>
+                      <p className="text-[13px] font-semibold">{item.serverName}</p>
                     </div>
                   ))}
                 </div>
               </div>
             )}
             {subServers.length > 0 && (
-              <div
-                className={`servers px-2 flex items-center flex-wrap ml-2 max-[600px]:py-2 ${
-                  dubServers.length === 0 ? "h-1/2" : "h-full"
-                }`}
-              >
+              <div className="servers p-2 flex items-center flex-wrap ml-2 max-[600px]:py-2">
                 <div className="flex items-center gap-x-2">
-                  <FontAwesomeIcon
-                    icon={faClosedCaptioning}
-                    className="text-[#ffbade] text-[13px]"
-                  />
+                  <FontAwesomeIcon icon={faClosedCaptioning} className="text-[#ffbade] text-[13px]" />
                   <p className="font-bold text-[14px]">SUB:</p>
                 </div>
                 <div className="flex gap-[7px] ml-8 flex-wrap">
-                  {subServers.map((item, index) => (
+                  {subServers.map((item, idx) => (
                     <div
-                      key={index}
+                      key={idx}
                       className={`px-6 py-[5px] rounded-lg cursor-pointer ${
-                        activeServerId === item?.data_id && activeServerName === item?.serverName
+                        activeServerId === item.data_id && activeServerName === item.serverName
                           ? "bg-[#ffbade] text-black"
                           : "bg-[#373646] text-white"
                       } max-[700px]:px-3`}
                       onClick={() => handleServerSelect(item)}
                     >
-                      <p className="text-[13px] font-semibold">
-                        {item.serverName}
-                      </p>
+                      <p className="text-[13px] font-semibold">{item.serverName}</p>
                     </div>
                   ))}
                 </div>
               </div>
             )}
             {dubServers.length > 0 && (
-              <div
-                className={`servers px-2 flex items-center flex-wrap ml-2 max-[600px]:py-2 ${
-                  subServers.length === 0 ? "h-1/2 " : "h-full"
-                }`}
-              >
+              <div className="servers p-2 flex items-center flex-wrap ml-2 max-[600px]:py-2">
                 <div className="flex items-center gap-x-3">
-                  <FontAwesomeIcon
-                    icon={faMicrophone}
-                    className="text-[#ffbade] text-[13px]"
-                  />
+                  <FontAwesomeIcon icon={faMicrophone} className="text-[#ffbade] text-[13px]" />
                   <p className="font-bold text-[14px]">DUB:</p>
                 </div>
                 <div className="flex gap-[7px] ml-8 flex-wrap">
-                  {dubServers.map((item, index) => (
+                  {dubServers.map((item, idx) => (
                     <div
-                      key={index}
+                      key={idx}
                       className={`px-6 py-[5px] rounded-lg cursor-pointer ${
-                        activeServerId === item?.data_id && activeServerName === item?.serverName
+                        activeServerId === item.data_id && activeServerName === item.serverName
                           ? "bg-[#ffbade] text-black"
                           : "bg-[#373646] text-white"
                       } max-[700px]:px-3`}
                       onClick={() => handleServerSelect(item)}
                     >
-                      <p className="text-[13px] font-semibold">
-                        {item.serverName}
-                      </p>
+                      <p className="text-[13px] font-semibold">{item.serverName}</p>
                     </div>
                   ))}
                 </div>
