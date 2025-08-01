@@ -1,0 +1,30 @@
+name: Deploy prod_cf to VPS
+
+on:
+  push:
+    branches:
+      - prod_cf
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
+      - name: SSH into VPS and deploy
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+            cd /var/www/zenime
+            git fetch origin prod_cf
+            git checkout prod_cf
+            git pull origin prod_cf
+            sudo rm -rf dist
+            npm install
+            npm run build
+          EOF
