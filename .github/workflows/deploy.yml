@@ -19,7 +19,7 @@ jobs:
 
       - name: SSH into VPS and deploy
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+          ssh ${{ secrets.USER_NAME }}@${{ secrets.HOST }} << 'EOF'
             cd /var/www/zenime
             git fetch origin prod_cf
             git checkout prod_cf
