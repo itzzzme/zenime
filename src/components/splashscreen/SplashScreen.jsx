@@ -138,7 +138,7 @@ function SplashScreen() {
               >
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
-                  className="text-lg text-black hover:text-[#ffbade] max-[600px]:mt-[7px]"
+                  className="text-lg text-black hover:text-white max-[600px]:mt-[7px]"
                 />
               </button>
             </div>
