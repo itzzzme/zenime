@@ -90,7 +90,7 @@ export default function Watch() {
       return;
     }
   
-    const newUrl = `/watch/${animeId}?ep=${episodeId}`;
+    const newUrl = `/stream/${animeId}?ep=${episodeId}`;
     if (isFirstSet.current) {
       navigate(newUrl, { replace: true });
       isFirstSet.current = false;

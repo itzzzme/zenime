@@ -36,7 +36,7 @@ function App() {
             <Route path="/" element={<SplashScreen />} />
             <Route path="/home" element={<Home />} />
             <Route path="/:id" element={<AnimeInfo />} />
-            <Route path="/watch/:id" element={<Watch />} />
+            <Route path="/stream/:id" element={<Watch />} />
             <Route path="/random" element={<AnimeInfo random={true} />} />
             <Route path="/404-not-found-page" element={<Error error="404" />} />
             <Route path="/error-page" element={<Error />} />

@@ -102,7 +102,7 @@ function Topten({ data, className }) {
                   src={`https://wsrv.nl/?url=${item.poster}`}
                   alt={item.title}
                   className="w-[60px] h-[75px] rounded-md object-cover flex-shrink-0 cursor-pointer"
-                  onClick={() => navigate(`/watch/${item.id}`)}
+                  onClick={() => navigate(`/stream/${item.id}`)}
                   onMouseEnter={() => handleMouseEnter(item, index)}
                   onMouseLeave={handleMouseLeave}
                 />

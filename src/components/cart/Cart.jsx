@@ -50,7 +50,7 @@ function Cart({ label, data, path }) {
                 src={`https://wsrv.nl/?url=${item.poster}`}
                 alt={item.title}
                 className="flex-shrink-0 w-[60px] h-[75px] rounded-md object-cover cursor-pointer"
-                onClick={() => navigate(`/watch/${item.id}`)}
+                onClick={() => navigate(`/stream/${item.id}`)}
                 onMouseEnter={() => handleImageEnter(item, index)}
                 onMouseLeave={handleImageLeave}
               />

@@ -112,7 +112,7 @@ function Banner({ item, index }) {
               className="text-[8px] bg-[#000000] px-[6px] py-[6px] rounded-full text-[#ffbade] max-[320px]:text-[6px]"
             />
             <Link
-              to={`/watch/${item.id}`}
+              to={`/stream/${item.id}`}
               className="max-[1000px]:text-[15px] font-semibold max-[320px]:text-[12px]"
             >
               Watch Now

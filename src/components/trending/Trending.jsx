@@ -35,7 +35,7 @@ const Trending = ({ trending }) => {
               <SwiperSlide
                 key={idx}
                 className="text-center flex text-[18px] justify-center items-center"
-                onClick={() => navigate(`/watch/${item.id}`)}
+                onClick={() => navigate(`/stream/${item.id}`)}
               >
                 <div className="w-full h-auto pb-[115%] relative inline-block overflow-hidden max-[575px]:pb-[150%]">
                   <div className="absolute left-0 top-0 bottom-0 overflow-hidden w-[40px] text-center font-semibold bg-[#201F31] max-[575px]:top-0 max-[575px]:h-[30px] max-[575px]:z-[9] max-[575px]:bg-white">

@@ -88,7 +88,7 @@ const ContinueWatching = () => {
                 </button>
 
                 <Link
-                  to={`/watch/${item?.id}?ep=${item.episodeId}`}
+                  to={`/stream/${item?.id}?ep=${item.episodeId}`}
                   className="inline-block bg-[#2a2c31] absolute left-0 top-0 w-full h-full group"
                 >
                   <img

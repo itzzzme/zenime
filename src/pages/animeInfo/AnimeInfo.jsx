@@ -227,7 +227,7 @@ function AnimeInfo({ random = false }) {
             </div>
             {animeInfo?.animeInfo?.Status?.toLowerCase() !== "not-yet-aired" ? (
               <Link
-                to={`/watch/${animeInfo.id}`}
+                to={`/stream/${animeInfo.id}`}
                 className="flex gap-x-2 px-6 py-2 bg-[#FFBADE] w-fit text-black items-center rounded-3xl mt-5"
               >
                 <FontAwesomeIcon

@@ -126,7 +126,7 @@ const CategoryCard = React.memo(
                         `${
                           path === "top-upcoming"
                             ? `/${item.id}`
-                            : `/watch/${item.id}`
+                            : `/stream/${item.id}`
                         }`
                       )
                     }
@@ -242,7 +242,7 @@ const CategoryCard = React.memo(
                       `${
                         path === "top-upcoming"
                           ? `/${item.id}`
-                          : `/watch/${item.id}`
+                          : `/stream/${item.id}`
                       }`
                     )
                   }
