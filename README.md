@@ -16,7 +16,7 @@
 </p>
 </p>
 <p align="center">
-    <a href="https://zenime.site">Zenime</a> is an open-source anime streaming service that uses <a href="https://github.com/itzzzme/anime-api">custom</a> API, built using ReactJS with javascript and Tailwind CSS. It lets you easily find any anime with intuitive search & suggestion feature and stream without any ads.
+    <a href="https://zenime.site">Zenime</a> is an open-source anime streaming service that uses <a href="https://github.com/itzzzme/anime-api">custom</a> API, built using ReactJS with javascript and Tailwind CSS. It lets you easily find any anime with intuitive search & suggestion feature and stream seamlessly.
  </p>
 
 <details>
