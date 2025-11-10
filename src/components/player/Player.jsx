@@ -39,12 +39,24 @@ const KEY_CODES = {
   I: "KeyI",
   F: "KeyF",
   V: "KeyV",
-  SPACE: "Space", 
-  SPACE_LEGACY: "Spacebar", 
+  SPACE: "Space",
+  SPACE_LEGACY: "Spacebar",
   ARROW_UP: "ArrowUp",
   ARROW_DOWN: "ArrowDown",
   ARROW_RIGHT: "ArrowRight",
   ARROW_LEFT: "ArrowLeft",
+};
+
+// Detect Safari browser for native HLS support
+const isSafari = () => {
+  const ua = navigator.userAgent.toLowerCase();
+  return (
+    ua.includes("safari") &&
+    !ua.includes("chrome") &&
+    !ua.includes("android") &&
+    !ua.includes("crios") &&
+    !ua.includes("fxios")
+  );
 };
 
 export default function Player({
@@ -270,12 +282,17 @@ export default function Player({
       // ignore
     }
 
-    const art = new Artplayer({
-      url:
-        m3u8proxy[Math.floor(Math.random() * m3u8proxy?.length)] +
+    // For Safari/iOS, try direct URL first to avoid proxy CORS issues with Apple TV
+    const useSafariNativeHLS = isSafari();
+    const videoUrl = useSafariNativeHLS
+      ? streamUrl
+      : m3u8proxy[Math.floor(Math.random() * m3u8proxy?.length)] +
         encodeURIComponent(streamUrl) +
         "&headers=" +
-        encodeURIComponent(JSON.stringify(headers)),
+        encodeURIComponent(JSON.stringify(headers));
+
+    const art = new Artplayer({
+      url: videoUrl,
       container: artRef.current,
       type: "m3u8",
       autoplay: autoPlay,
@@ -499,6 +516,72 @@ export default function Player({
         });
       }
 
+      // Add native HTML5 <track> elements for AirPlay subtitle support
+      // AirPlay devices (Apple TV, etc.) only read native tracks, not custom renderers
+      if (subs?.length > 0 && art.video) {
+        const videoElement = art.video;
+
+        // Remove any existing track elements first
+        const existingTracks = videoElement.querySelectorAll("track");
+        existingTracks.forEach((track) => track.remove());
+
+        // Add native track elements for each subtitle
+        subs.forEach((sub) => {
+          const track = document.createElement("track");
+          track.kind = "subtitles";
+          track.label = sub.label;
+
+          // Set language code based on label
+          const labelLower = sub.label.toLowerCase();
+          if (labelLower.includes("english")) track.srclang = "en";
+          else if (labelLower.includes("spanish")) track.srclang = "es";
+          else if (labelLower.includes("french")) track.srclang = "fr";
+          else if (labelLower.includes("german")) track.srclang = "de";
+          else if (labelLower.includes("japanese")) track.srclang = "ja";
+          else if (labelLower.includes("chinese")) track.srclang = "zh";
+          else if (labelLower.includes("korean")) track.srclang = "ko";
+          else track.srclang = labelLower.slice(0, 2);
+
+          track.src = sub.file;
+
+          // Set default track to English
+          if (labelLower === "english") {
+            track.default = true;
+            track.mode = "showing";
+          } else {
+            track.mode = "hidden";
+          }
+
+          videoElement.appendChild(track);
+        });
+
+        // Store native tracks reference on art instance for later sync
+        art.nativeTracks = Array.from(videoElement.textTracks);
+      }
+
+      // Add Media Session API for better AirPlay metadata
+      if ("mediaSession" in navigator && animeInfo) {
+        try {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: episodeNum
+              ? `${animeInfo.title} - Episode ${episodeNum}`
+              : animeInfo.title,
+            artist: animeInfo.japanese_title || animeInfo.title,
+            artwork: animeInfo.poster
+              ? [
+                  {
+                    src: animeInfo.poster,
+                    sizes: "512x512",
+                    type: "image/jpeg",
+                  },
+                ]
+              : [],
+          });
+        } catch (err) {
+          console.warn("Failed to set Media Session metadata:", err);
+        }
+      }
+
       const skipRanges = [
         ...(intro?.start != null && intro?.end != null ? [[intro.start + 1, intro.end - 1]] : []),
         ...(outro?.start != null && outro?.end != null ? [[outro.start + 1, outro.end]] : []),
@@ -582,6 +665,24 @@ export default function Player({
               onSwitch: (item) => {
                 item.tooltip = item.switch ? "Hide" : "Show";
                 art.subtitle.show = !item.switch;
+
+                // Sync native tracks visibility for AirPlay
+                if (art.nativeTracks && art.nativeTracks.length > 0) {
+                  art.nativeTracks.forEach((track) => {
+                    if (track.mode === "showing" && item.switch) {
+                      track.mode = "hidden";
+                    } else if (track.mode === "hidden" && !item.switch) {
+                      // Only show the currently selected track
+                      const currentSubLabel = art.subtitle.url
+                        ? subs.find((s) => s.file === art.subtitle.url)?.label
+                        : null;
+                      if (currentSubLabel && track.label === currentSubLabel) {
+                        track.mode = "showing";
+                      }
+                    }
+                  });
+                }
+
                 return !item.switch;
               },
             },
@@ -593,6 +694,18 @@ export default function Player({
           ],
           onSelect: (item) => {
             art.subtitle.switch(item.url, { name: item.html });
+
+            // Sync native tracks for AirPlay compatibility
+            if (art.nativeTracks && art.nativeTracks.length > 0) {
+              art.nativeTracks.forEach((track) => {
+                if (track.label === item.html) {
+                  track.mode = "showing";
+                } else {
+                  track.mode = "hidden";
+                }
+              });
+            }
+
             return item.html;
           },
         });

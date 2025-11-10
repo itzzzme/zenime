@@ -1,3 +1,11 @@
+/* Hide native subtitle rendering in browser - Artplayer handles display */
+/* Native tracks are still available for AirPlay devices */
+video::cue {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
 .art-subtitle {
   padding-inline: 0px !important;
   gap: 2px !important;
