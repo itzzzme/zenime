@@ -28,6 +28,7 @@ import {
 import "./Player.css";
 import website_name from "@/src/config/website";
 import getChapterStyles from "./getChapterStyle";
+import { getLanguageCode } from "@/src/utils/languageCode";
 import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
 import artplayerPluginUploadSubtitle from "./artplayerPluginUploadSubtitle";
 
@@ -531,16 +532,8 @@ export default function Player({
           track.kind = "subtitles";
           track.label = sub.label;
 
-          // Set language code based on label
-          const labelLower = sub.label.toLowerCase();
-          if (labelLower.includes("english")) track.srclang = "en";
-          else if (labelLower.includes("spanish")) track.srclang = "es";
-          else if (labelLower.includes("french")) track.srclang = "fr";
-          else if (labelLower.includes("german")) track.srclang = "de";
-          else if (labelLower.includes("japanese")) track.srclang = "ja";
-          else if (labelLower.includes("chinese")) track.srclang = "zh";
-          else if (labelLower.includes("korean")) track.srclang = "ko";
-          else track.srclang = labelLower.slice(0, 2);
+          // Set language code based on label using iso-639-1
+          track.srclang = getLanguageCode(sub.label);
 
           track.src = sub.file;
 
