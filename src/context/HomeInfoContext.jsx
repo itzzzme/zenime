@@ -4,15 +4,22 @@ import getHomeInfo from "../utils/getHomeInfo.utils.js";
 const CACHE_KEY = "homeInfoCache";
 const HomeInfoContext = createContext();
 
-const isValidHomeInfo = (data) =>
-  data && typeof data === "object" && Object.keys(data).length > 0;
+const isValidHomeInfo = (data) => {
+  if (!data || typeof data !== "object") return false;
+
+  return Object.values(data).some(
+    (value) =>
+      (Array.isArray(value) && value.length > 0) ||
+      (typeof value === "object" && value !== null && Object.keys(value).length > 0)
+  );
+};
 
 export const HomeInfoProvider = ({ children }) => {
   const [homeInfo, setHomeInfo] = useState(() => {
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (!cached) return null;
-
     try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (!cached) return null;
+
       const parsed = JSON.parse(cached);
       return isValidHomeInfo(parsed?.data) ? parsed.data : null;
     } catch {
@@ -20,27 +27,14 @@ export const HomeInfoProvider = ({ children }) => {
     }
   });
 
-  const [homeInfoLoading, setHomeInfoLoading] = useState(() => {
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (!cached) return true;
-
-    try {
-      const parsed = JSON.parse(cached);
-      return !isValidHomeInfo(parsed?.data);
-    } catch {
-      return true;
-    }
-  });
-
+  const [homeInfoLoading, setHomeInfoLoading] = useState(() => !homeInfo);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const fetchHomeInfo = async () => {
-      if (!isValidHomeInfo(homeInfo)) {
-        setHomeInfoLoading(true);
-      }
+      setHomeInfoLoading(true);
 
       try {
         const data = await getHomeInfo();
@@ -51,14 +45,12 @@ export const HomeInfoProvider = ({ children }) => {
           setHomeInfo(data);
           setError(null);
         } else {
-          setHomeInfo(null);
-          setError(new Error("No results found"));
+          setError(new Error("Invalid or empty home data"));
         }
       } catch (err) {
         if (!cancelled) {
           console.error("Error fetching home info:", err);
           setError(err);
-          setHomeInfo(null);
         }
       } finally {
         if (!cancelled) {
@@ -74,7 +66,13 @@ export const HomeInfoProvider = ({ children }) => {
 
       try {
         const parsed = e.newValue ? JSON.parse(e.newValue) : null;
-        setHomeInfo(isValidHomeInfo(parsed?.data) ? parsed.data : null);
+
+        if (isValidHomeInfo(parsed?.data)) {
+          setHomeInfo(parsed.data);
+          setError(null);
+        } else {
+          setHomeInfo(null);
+        }
       } catch {
         setHomeInfo(null);
       }

@@ -5,54 +5,74 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
 export default async function getHomeInfo() {
   const api_url = import.meta.env.VITE_API_URL;
-
   const currentTime = Date.now();
-  const cachedData = JSON.parse(localStorage.getItem(CACHE_KEY));
 
-  if (cachedData && currentTime - cachedData.timestamp < CACHE_DURATION) {
-    return cachedData.data;
+  try {
+    const cachedRaw = localStorage.getItem(CACHE_KEY);
+    if (cachedRaw) {
+      const cachedData = JSON.parse(cachedRaw);
+
+      const isValidCache =
+        cachedData?.data &&
+        Object.keys(cachedData.data).length > 0 &&
+        currentTime - cachedData.timestamp < CACHE_DURATION;
+
+      if (isValidCache) {
+        return cachedData.data;
+      }
+    }
+  } catch {
+    localStorage.removeItem(CACHE_KEY);
   }
-  const response = await axios.get(`${api_url}`);
-  if (
-    !response.data.results ||
-    Object.keys(response.data.results).length === 0
-  ) {
+
+  const response = await axios.get(api_url);
+  const results = response?.data?.results;
+
+  if (!results || typeof results !== "object") {
     return null;
   }
+
   const {
+    spotlights = [],
+    trending = [],
+    topTen: topten = [],
+    today: todaySchedule = [],
+    topAiring: top_airing = [],
+    mostPopular: most_popular = [],
+    mostFavorite: most_favorite = [],
+    latestCompleted: latest_completed = [],
+    latestEpisode: latest_episode = [],
+    topUpcoming: top_upcoming = [],
+    recentlyAdded: recently_added = [],
+    genres = [],
+  } = results;
+
+  const finalData = {
     spotlights,
     trending,
-    topTen: topten,
-    today: todaySchedule,
-    topAiring: top_airing,
-    mostPopular: most_popular,
-    mostFavorite: most_favorite,
-    latestCompleted: latest_completed,
-    latestEpisode: latest_episode,
-    topUpcoming: top_upcoming,
-    recentlyAdded: recently_added,
+    topten,
+    todaySchedule,
+    top_airing,
+    most_popular,
+    most_favorite,
+    latest_completed,
+    latest_episode,
+    top_upcoming,
+    recently_added,
     genres,
-  } = response.data.results;
-
-  const dataToCache = {
-    data: {
-      spotlights,
-      trending,
-      topten,
-      todaySchedule,
-      top_airing,
-      most_popular,
-      most_favorite,
-      latest_completed,
-      latest_episode,
-      top_upcoming,
-      recently_added,
-      genres,
-    },
-    timestamp: currentTime,
   };
 
-  localStorage.setItem(CACHE_KEY, JSON.stringify(dataToCache));
+  if (Object.keys(finalData).length === 0) {
+    return null;
+  }
 
-  return dataToCache.data;
+  localStorage.setItem(
+    CACHE_KEY,
+    JSON.stringify({
+      data: finalData,
+      timestamp: currentTime,
+    })
+  );
+
+  return finalData;
 }
