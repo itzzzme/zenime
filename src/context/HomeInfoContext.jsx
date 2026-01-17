@@ -4,40 +4,66 @@ import getHomeInfo from "../utils/getHomeInfo.utils.js";
 const CACHE_KEY = "homeInfoCache";
 const HomeInfoContext = createContext();
 
+const isValidHomeInfo = (data) =>
+  data && typeof data === "object" && Object.keys(data).length > 0;
+
 export const HomeInfoProvider = ({ children }) => {
   const [homeInfo, setHomeInfo] = useState(() => {
     const cached = localStorage.getItem(CACHE_KEY);
     if (!cached) return null;
+
     try {
       const parsed = JSON.parse(cached);
-      return parsed?.data ?? null;
+      return isValidHomeInfo(parsed?.data) ? parsed.data : null;
     } catch {
       return null;
     }
   });
 
-  const [homeInfoLoading, setHomeInfoLoading] = useState(() => !localStorage.getItem(CACHE_KEY));
+  const [homeInfoLoading, setHomeInfoLoading] = useState(() => {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (!cached) return true;
+
+    try {
+      const parsed = JSON.parse(cached);
+      return !isValidHomeInfo(parsed?.data);
+    } catch {
+      return true;
+    }
+  });
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
 
     const fetchHomeInfo = async () => {
-      if (!homeInfo) setHomeInfoLoading(true);
+      if (!isValidHomeInfo(homeInfo)) {
+        setHomeInfoLoading(true);
+      }
 
       try {
-        const data = await getHomeInfo(); 
-        if (!cancelled) {
-          if (data) setHomeInfo(data);
-          else setError(new Error("No results found"));
+        const data = await getHomeInfo();
+
+        if (cancelled) return;
+
+        if (isValidHomeInfo(data)) {
+          setHomeInfo(data);
+          setError(null);
+        } else {
+          setHomeInfo(null);
+          setError(new Error("No results found"));
         }
       } catch (err) {
         if (!cancelled) {
           console.error("Error fetching home info:", err);
           setError(err);
+          setHomeInfo(null);
         }
       } finally {
-        if (!cancelled) setHomeInfoLoading(false);
+        if (!cancelled) {
+          setHomeInfoLoading(false);
+        }
       }
     };
 
@@ -45,23 +71,27 @@ export const HomeInfoProvider = ({ children }) => {
 
     const onStorage = (e) => {
       if (e.key !== CACHE_KEY) return;
+
       try {
         const parsed = e.newValue ? JSON.parse(e.newValue) : null;
-        setHomeInfo(parsed?.data ?? null);
+        setHomeInfo(isValidHomeInfo(parsed?.data) ? parsed.data : null);
       } catch {
-        // ignore parse errors
+        setHomeInfo(null);
       }
     };
+
     window.addEventListener("storage", onStorage);
 
     return () => {
       cancelled = true;
       window.removeEventListener("storage", onStorage);
     };
-  }, []); 
+  }, []);
 
   return (
-    <HomeInfoContext.Provider value={{ homeInfo, homeInfoLoading, error }}>
+    <HomeInfoContext.Provider
+      value={{ homeInfo, homeInfoLoading, error }}
+    >
       {children}
     </HomeInfoContext.Provider>
   );
